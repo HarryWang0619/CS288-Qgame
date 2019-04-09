@@ -1,5 +1,3 @@
-# I was thinking about it and it seems like any game with only 1 turn has significantly less utility than a game with 2 turns for quantum strategies. You can only instate a quantum state, but you cannot convert that back into a pure state, inevitably leaving a certain amount up to chance. -Brandon
-
 import sys
 import numpy as np
 import copy as cp
@@ -25,6 +23,11 @@ SuperIdentity = np.array([[(1 / mt.sqrt(2)), (1 / mt.sqrt(2))], [(1 / mt.sqrt(2)
 #A Matrix that creates a superimposition of probabilities when applied to the State.
 #When applied twice to the State, returns the inverse of the State.
 SuperNaught = np.array([[(1 / mt.sqrt(2)), - (1 / mt.sqrt(2))], [(1 / mt.sqrt(2)), (1 / mt.sqrt(2))]])
+
+# BaseScore
+#A matrix representing the starting scores.
+#BaseScore[0] represents Q's score. BaseScore[1] represents P's score.
+BaseScore = np.array([0, 0])
 
 ##### Transformations #####
 # No Flip
@@ -86,17 +89,39 @@ def qGamble(Q1, P1, Q2):
 
 # score
 #Takes a state as an argument. Returns 1 if Q wins, and 0 if Picard wins.
-def score(st):
-    if st == np.array([1, 0]):
-        return 1
-    elif st == np.array([0, 1]):
-        return 0
+def score(st, sc):
+    scr = sc
+    if np.array_equal( st, np.array([1, 0])):
+        scr[1] += 1
+    elif np.array_equal( st, np.array([0, 1])):
+        scr[0] += 1
     else:
         print("score error")
         return 0
+    return scr
 
 
 ##### Strategy #####
 
-# If someone has an idea in mind or wants to take a shot at this
+# QStrategy
+#An array representing all of the current strategies available to Q
+QStrategy = [N, F, SI, SN]
 
+# PStrategy
+#An array representing all of the current strategies available to Picard
+PStrategy = [N, F]
+
+# main
+#The main function. Run to see results.
+def main():
+    for i in range(32):
+        print("Permutation: " + str(i + 1))
+        qStrat1 = mt.floor(i/8 % 4)
+        qStrat2 = mt.floor(i/2 % 4)
+        pStrat1 = i % 2
+        print(str(qStrat1) + " " + str(qStrat2) + " " + str(pStrat1))
+        sc = BaseScore
+        for j in range(100):
+            sc = score(qGamble(QStrategy[qStrat1], PStrategy[pStrat1], QStrategy[qStrat2]), sc)
+        print("Final Score: " + str(sc))
+main()

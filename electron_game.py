@@ -90,7 +90,7 @@ def qGamble(Q1, P1, Q2):
 # score
 #Takes a state as an argument. Returns 1 if Q wins, and 0 if Picard wins.
 def score(st, sc):
-    scr = sc
+    scr = cp.copy(sc)
     if np.array_equal( st, np.array([1, 0])):
         scr[1] += 1
     elif np.array_equal( st, np.array([0, 1])):
@@ -117,9 +117,9 @@ def main():
     for i in range(32):
         print("Permutation: " + str(i + 1))
         qStrat1 = mt.floor(i/8 % 4)
-        qStrat2 = mt.floor(i/2 % 4)
         pStrat1 = i % 2
-        print(str(qStrat1) + " " + str(qStrat2) + " " + str(pStrat1))
+        qStrat2 = mt.floor(i/2 % 4)
+        print(str(qStrat1) +  " " + str(pStrat1) + " " + str(qStrat2))
         sc = BaseScore
         for j in range(100):
             sc = score(qGamble(QStrategy[qStrat1], PStrategy[pStrat1], QStrategy[qStrat2]), sc)

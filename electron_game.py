@@ -26,7 +26,7 @@ SuperNaught = np.array([[(1 / mt.sqrt(2)), - (1 / mt.sqrt(2))], [(1 / mt.sqrt(2)
 
 # BaseScore
 #A matrix representing the starting scores.
-#BaseScore[0] represents Q's score. BaseScore[1] represents P's score.
+#BaseScore[1] represents Q's score. BaseScore[0] represents P's score.
 BaseScore = np.array([0, 0])
 
 ##### Transformations #####
@@ -75,7 +75,7 @@ def qGamble(Q1, P1, Q2):
         #1. models encompassing more than 2 states (such as rock paper scissors)
         #2. a more steadfast interaction between the simultaneity of the states.
         else:
-            r = rd.randint(1, 10)
+            r = rd.randint(0, 9)
             p = (newState[i] ** 2) * 10
             if r > p:
                 newState[i] = 0
@@ -124,4 +124,4 @@ def main():
         for j in range(100):
             sc = score(qGamble(QStrategy[qStrat1], PStrategy[pStrat1], QStrategy[qStrat2]), sc)
         print("Final Score: " + str(sc))
-main()
+#main()
